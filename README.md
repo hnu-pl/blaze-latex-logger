@@ -1,4 +1,4 @@
-# blaze-latex-logging-example
+# blaze-latex-logger
 Simple code example to demonstrate logging with LaTeX output,
 with minimal features (just wrtie on one file, no automatic log rotating, etc.)
 and Haskell package dependencies (must use external log display server).
