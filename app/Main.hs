@@ -6,12 +6,13 @@ module Main (main) where
 import Lib
 
 import Text.Blaze
-import Text.Blaze.Html5 hiding (main, head, span)
+import Text.Blaze.Html5 hiding (main, head, span, div, map, style)
 import qualified Text.Blaze.Html5 as H
 import Text.Blaze.Html5.Attributes hiding (id)
 import qualified Text.Blaze.Html5.Attributes as A
 import Text.Blaze.Html.Renderer.Pretty
 import System.IO
+import Data.Tree
 
 doLaTeXlogging :: Handle -> IO ()
 doLaTeXlogging h = do
@@ -30,9 +31,19 @@ doLaTeXlogging h = do
     s2 <- getline
     printHtml $ p ! A.id "s2" $ "2nd hello world, " <> toMarkup s2 <> "?"
     printHtml $ p $ __LOC__ <> "\\( \\displaystyle ~ \\frac{y}{z} \\)"
-    printHtml $ mconcat . replicate 20 $ p "\\( \\displaystyle ~ \\frac{z}{x} \\)"
+    printHtml $ tftree [ foldTree tfnc mytree ]
+    printHtml $ tftreeWith [style "font-size: 8pt"] [ foldTree tfnc mytree ]
     println "</body>"
     println "</html>"
+
+mytree :: Tree Html
+mytree = Node "a"
+            [ Node "b"  [ leaf "d", leaf "e" ]
+            , Node "c"  [ Node "f" [ Node "h" [leaf "i", leaf "j", leaf "k"] ]
+                        , leaf "g"
+                        ]
+            ]
+    where leaf v = Node v []
 
 main :: IO ()
 main = do

@@ -2,9 +2,11 @@
 module Lib
     ( katexStarterHead
     , mathjaxStarterHead
+    , tftree, tftreeWith
+    , tfnc, tfnc_, tfncWith, tfncWith_
     ) where
 
-import Text.Blaze.Html5 hiding (head)
+import Text.Blaze.Html5 hiding (head, div, style)
 import qualified Text.Blaze.Html5 as H
 import Text.Blaze.Html5.Attributes hiding (id)
 import qualified Text.Blaze.Html5.Attributes as A
@@ -18,10 +20,45 @@ scrollToBottomOnLoad = script "\
 \document.querySelector('body').onload = setTimeout(scrollToBottom, 250);\
 \"
 
+-- https://dumptyd.github.io/treeflex/ accessed 2022-12-27
+treeFlex :: Html
+treeFlex = link
+    ! rel "stylesheet"
+    ! href "https://unpkg.com/treeflex/dist/css/treeflex.css"
+
+tftree :: [Html] -> Html
+tftree = tftreeWith []
+
+tftreeWith :: [Attribute] -> [Html] -> Html
+tftreeWith as = foldl (!) H.div (class_ "tf-tree" : as) . ul . mconcat
+
+
+tfncWith :: [Attribute] -> Html -> [Html] -> Html
+tfncWith as v [] = li $ foldl (!) H.span (class_ "tf-nc" : as) v
+tfncWith as v ts = li $ do
+    foldl (!) H.span (class_ "tf-nc" : as) v
+    ul $ mconcat ts
+
+tfncWith_ :: [Attribute] -> Html -> Html
+tfncWith_ as v = tfncWith as v []
+
+tfnc :: Html -> [Html] -> Html
+tfnc v [] = li $ H.span ! class_ "tf-nc" $ v
+tfnc v ts = li $ do H.span ! class_ "tf-nc" $ v
+                    ul $ mconcat ts
+
+tfnc_ :: Html -> Html
+tfnc_ v = tfnc v []
+
+commonHeaderContents :: Html
+commonHeaderContents = do 
+    scrollToBottomOnLoad
+    treeFlex
+
 -- https://katex.org/docs/browser.html#starter-template accessed 2022-12-26
 katexStarterHead :: Html
 katexStarterHead = H.head $ do
-    scrollToBottomOnLoad
+    commonHeaderContents
     link
         ! rel "stylesheet"
         ! href "https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css"
@@ -52,7 +89,7 @@ crossorigin = customAttribute "crossorigin"
 -- https://www.mathjax.org/#gettingstarted accessed 2022-12-27
 mathjaxStarterHead :: Html
 mathjaxStarterHead = H.head $ do
-    scrollToBottomOnLoad
+    commonHeaderContents
     script
         ! src "https://polyfill.io/v3/polyfill.min.js?features=es6"
         ! crossorigin "anonymous"

@@ -35,6 +35,7 @@ library
       base >=4.7 && <5
     , blaze-html
     , blaze-markup
+    , containers
   default-language: Haskell2010
 
 executable blaze-latex-logger-exe
@@ -49,6 +50,7 @@ executable blaze-latex-logger-exe
     , blaze-html
     , blaze-latex-logger
     , blaze-markup
+    , containers
   default-language: Haskell2010
 
 test-suite blaze-latex-logger-test
@@ -64,4 +66,5 @@ test-suite blaze-latex-logger-test
     , blaze-html
     , blaze-latex-logger
     , blaze-markup
+    , containers
   default-language: Haskell2010
