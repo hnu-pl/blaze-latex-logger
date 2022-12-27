@@ -1,5 +1,5 @@
 {-# LANGUAGE CPP #-}
-#define __LOC__ ( __FILE__ <> ":" <> show( __LINE__ :: Int ) )
+#define __LOC__ (toMarkup( __FILE__ <> ":" <> show( __LINE__ :: Int ) ))
 {-# LANGUAGE OverloadedStrings #-}
 module Main (main) where
 
@@ -23,14 +23,14 @@ doLaTeXlogging h = do
     println "<html>"
     printHtml katexStarterHead
     println "<body>"
-    printHtml $ p $ toMarkup( __LOC__ <> "\\( \\displaystyle ~ \\frac{x}{y} \\)" )
+    printHtml $ p $ __LOC__ <> "\\( \\displaystyle ~ \\frac{x}{y} \\)"
     s1 <- getline
-    printHtml $ p ! A.id "s1" $ toMarkup( "1st hello world, " <> s1 <> "?" )
-    printHtml $ foldr1 (<>) . replicate 20 $ p "\\( \\displaystyle ~ \\frac{z}{w} \\)"
+    printHtml $ p ! A.id "s1" $ "1st hello world, " <> toMarkup s1 <> "?"
+    printHtml $ mconcat . replicate 20 $ p "\\( \\displaystyle ~ \\frac{z}{w} \\)"
     s2 <- getline
-    printHtml $ p ! A.id "s2" $ toMarkup( "2nd hello world, " <> s2 <> "?" )
-    printHtml $ p $ toMarkup( __LOC__ <> "\\( \\displaystyle ~ \\frac{y}{z} \\)" )
-    printHtml $ foldr1 (<>) . replicate 20 $ p "\\( \\displaystyle ~ \\frac{z}{x} \\)"
+    printHtml $ p ! A.id "s2" $ "2nd hello world, " <> toMarkup s2 <> "?"
+    printHtml $ p $ __LOC__ <> "\\( \\displaystyle ~ \\frac{y}{z} \\)"
+    printHtml $ mconcat . replicate 20 $ p "\\( \\displaystyle ~ \\frac{z}{x} \\)"
     println "</body>"
     println "</html>"
 
