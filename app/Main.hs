@@ -3,7 +3,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main (main) where
 
-import Lib
+import Text.Blaze.Html.Logger 
 
 import Text.Blaze
 import Text.Blaze.Html5 hiding (main, head, span, div, map, style)

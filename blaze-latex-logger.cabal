@@ -25,7 +25,7 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
+      Text.Blaze.Html.Logger
   other-modules:
       Paths_blaze_latex_logger
   hs-source-dirs:
