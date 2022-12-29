@@ -14,15 +14,15 @@ import Text.Blaze.Html.Renderer.Pretty
 import System.IO
 import Data.Tree
 
-doLaTeXlogging :: Handle -> IO ()
-doLaTeXlogging h = do
+doLaTeXloggingWith :: Html -> Handle -> IO ()
+doLaTeXloggingWith latexRendererHead h = do
     let println = hPutStrLn h
     let printHtml = println . renderHtml
     let flush = hFlush h
     let getline = flush >> getLine
     println "<!DOCTYPE html>"
     println "<html>"
-    printHtml katexStarterHead
+    printHtml latexRendererHead
     println "<body>"
     printHtml $ p $ __LOC__ <> "\\( \\displaystyle ~ \\frac{x}{y} \\)"
     s1 <- getline
@@ -52,8 +52,11 @@ main = do
     -- http://localhost:5500/outmathjax.html
     -- (or, with any similar util web srv displaying fresh content on file update)
     putStrLn "using KaTeX ..."
-    withFile "outkatex.html"   WriteMode doLaTeXlogging
+    withFile "outkatex.html"   WriteMode $
+        doLaTeXloggingWith katexStarterHead
     putStrLn "using MathJax ..."
-    withFile "outmathjax.html" WriteMode doLaTeXlogging
+    withFile "outmathjax.html" WriteMode $
+        doLaTeXloggingWith mathjaxStarterHead
+
 
 
